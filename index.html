@@ -46,8 +46,6 @@
         unityInstance.SendMessage("AppInitializer", "ReceiveUserID", userID);
         var username = getURLParameter("username");
         unityInstance.SendMessage("AppInitializer", "ReceiveUsername", username);
-        unityInstance.SendMessage("GamePlayManager", "ReceiveUserID", userID);
-        unityInstance.SendMessage("GamePlayManager", "ReceiveUsername", username);
       }).catch(function(error) {
         console.error("Unity load error: ", error);
       });
