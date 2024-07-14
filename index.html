@@ -43,9 +43,9 @@
       }).then(function(instance) {
         unityInstance = instance;
         var userID = getURLParameter("userid");
-        unityInstance.SendMessage("GameManager", "ReceiveUserID", userID);
+        unityInstance.SendMessage("AppInitializer", "ReceiveUserID", userID);
         var username = getURLParameter("username");
-        unityInstance.SendMessage("GameManager", "ReceiveUsername", username);
+        unityInstance.SendMessage("AppInitializer", "ReceiveUsername", username);
       }).catch(function(error) {
         console.error("Unity load error: ", error);
       });
