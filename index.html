@@ -16,6 +16,7 @@
       // Проверка доступности данных
       if (Telegram.WebApp.initDataUnsafe) {
         const userData = Telegram.WebApp.initDataUnsafe.user;
+        var refId = getURLParameter('startapp');
         console.log("Got userdata " + userData.id);
         let canvas;
         if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
@@ -33,8 +34,8 @@
           document.body.style.textAlign = "left";
         } else {
           canvas = document.querySelector("#unity-canvas");
-          canvas.style.width = "560px"; // Исходная ширина для десктопа
-          canvas.style.height = "1220px"; // Исходная высота для десктопа
+          canvas.style.width = "100%";
+          canvas.style.height = "100%";
         }
         
         var unityInstance = createUnityInstance(canvas, {
@@ -47,6 +48,7 @@
           productVersion: "0.1",
         }).then(function(instance) {
           unityInstance = instance;
+          unityInstance.SendMessage("AppInitializer", "ReceiveReferral", refId);
           unityInstance.SendMessage("AppInitializer", "ReceiveUserID", userData.id.toString());
           unityInstance.SendMessage("AppInitializer", "ReceiveUsername", userData.username);
         }).catch(function(error) {
@@ -62,4 +64,15 @@
 </script>
 </body>
 </html>
+
+<script>
+  function getURLParameter(name) {
+    name = name.replace(/[\[\]]/g, '\\$&');
+    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+            results = regex.exec(window.location.href);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+  }
+</script>
 
