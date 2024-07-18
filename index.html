@@ -47,8 +47,8 @@
           productVersion: "0.1",
         }).then(function(instance) {
           unityInstance = instance;
-          unityInstance.SendMessage("JsDataReceiver", "ReceiveUserID", userData.id.toString());
-          unityInstance.SendMessage("JsDataReceiver", "ReceiveUsername", userData.username);
+          unityInstance.SendMessage("AppInitializer", "ReceiveUserID", userData.id.toString());
+          unityInstance.SendMessage("AppInitializer", "ReceiveUsername", userData.username);
         }).catch(function(error) {
           console.error("Unity load error: ", error);
         });
