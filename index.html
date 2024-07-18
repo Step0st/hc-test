@@ -48,7 +48,7 @@
           productVersion: "0.1",
         }).then(function(instance) {
           unityInstance = instance;
-          unityInstance.SendMessage("AppInitializer", "ReceiveReferral", refId);
+          if (refId != null) { unityInstance.SendMessage("AppInitializer", "ReceiveReferral", refId);}
           unityInstance.SendMessage("AppInitializer", "ReceiveUserID", userData.id.toString());
           unityInstance.SendMessage("AppInitializer", "ReceiveUsername", userData.username);
         }).catch(function(error) {
