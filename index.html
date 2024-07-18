@@ -4,16 +4,6 @@
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <title>Unity WebGL Player | hizzycoinapp</title>
-  <script>
-    function getURLParameter(name) {
-      name = name.replace(/[\[\]]/g, '\\$&');
-      var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-              results = regex.exec(window.location.href);
-      if (!results) return null;
-      if (!results[2]) return '';
-      return decodeURIComponent(results[2].replace(/\+/g, ' '));
-    }
-  </script>
 </head>
 <body style="text-align: center; padding: 0; border: 0; margin: 0;">
 <canvas id="unity-canvas" width=560 height=1220 style="width: 560px; height: 1220px; background: #231F20"></canvas>
@@ -23,14 +13,15 @@
   document.addEventListener("DOMContentLoaded", function() {
     if (typeof Telegram !== 'undefined') {
       Telegram.WebApp.ready();
+      
       if (Telegram.WebApp.initDataUnsafe) {
         const userData = Telegram.WebApp.initDataUnsafe.user;
         const startParam = Telegram.WebApp.initDataUnsafe.start_param;
-        
         var refId = startParam ? startParam : "";
         console.log("Got referral " + refId);
         let canvas;
         if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+          
           var meta = document.createElement('meta');
           meta.name = 'viewport';
           meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
@@ -45,7 +36,7 @@
         } else {
           canvas = document.querySelector("#unity-canvas");
           canvas.style.width = "100%";
-          canvas.style.height = "80%";
+          canvas.style.height = "100%";
         }
         
         var unityInstance = createUnityInstance(canvas, {
