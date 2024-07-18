@@ -16,7 +16,7 @@
       // Проверка доступности данных
       if (Telegram.WebApp.initDataUnsafe) {
         const userData = Telegram.WebApp.initDataUnsafe.user;
-        var refId = getURLParameter('startapp');
+        var refId = getURLParameter('startapp') || "";
         console.log("Got userdata " + userData.id);
         let canvas;
         if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
@@ -48,7 +48,8 @@
           productVersion: "0.1",
         }).then(function(instance) {
           unityInstance = instance;
-          if (refId != null) { unityInstance.SendMessage("AppInitializer", "ReceiveReferral", refId);}
+          if (refId) { unityInstance.SendMessage("AppInitializer", "ReceiveReferral", refId);
+          }
           unityInstance.SendMessage("AppInitializer", "ReceiveUserID", userData.id.toString());
           unityInstance.SendMessage("AppInitializer", "ReceiveUsername", userData.username);
         }).catch(function(error) {
