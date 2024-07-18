@@ -1,62 +1,53 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity WebGL Player | hizzycoinapp</title>
-    <script>
-      function getURLParameter(name) {
-        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-                results = regex.exec(location.search);
-        return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-      }
-    </script>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  </head>
-  <body style="text-align: center; padding: 0; border: 0; margin: 0;">
-    <canvas id="unity-canvas" width=560 height=1220 style="width: 560px; height: 1220px; background: #231F20"></canvas>
-    <script src="Build/hizzycoin_webgl3_Tg_API.loader.js"></script>
-    <script>
-      Telegram.WebApp.ready();
-      const userData = Telegram.WebApp.initDataUnsafe.user;
-      const userID = userData.id; 
-      const username = userData.username;
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Unity WebGL Player | hizzycoinapp</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body style="text-align: center; padding: 0; border: 0; margin: 0;">
+<canvas id="unity-canvas" width=560 height=1220 style="width: 560px; height: 1220px; background: #231F20"></canvas>
+<script src="Build/hizzycoin_webgl3_Tg_API.loader.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    Telegram.WebApp.ready();
 
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        // Mobile device style: fill the whole browser client area with the game canvas:
-        var meta = document.createElement('meta');
-        meta.name = 'viewport';
-        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-        document.getElementsByTagName('head')[0].appendChild(meta);
+    // После того как Telegram Web App будет готов
+    const userData = Telegram.WebApp.initDataUnsafe.user;
+    const userID = userData.id.toString();
+    const username = userData.username;
 
-        var canvas = document.querySelector("#unity-canvas");
-        canvas.style.width = "100%";
-        canvas.style.height = "100%";
-        canvas.style.position = "fixed";
+    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+      // Mobile device style
+      var meta = document.createElement('meta');
+      meta.name = 'viewport';
+      meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+      document.getElementsByTagName('head')[0].appendChild(meta);
 
-        document.body.style.textAlign = "left";
-      }
-      var unityInstance = createUnityInstance(canvas, {
-        dataUrl: "Build/hizzycoin_webgl3_Tg_API.data",
-        frameworkUrl: "Build/hizzycoin_webgl3_Tg_API.framework.js",
-        codeUrl: "Build/hizzycoin_webgl3_Tg_API.wasm",
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "hizzycoin",
-        productName: "hizzycoinapp",
-        productVersion: "0.1",
-      }).then(function(instance) {
-        unityInstance = instance;
-        //var userID = getURLParameter("userid");
-        unityInstance.SendMessage("AppInitializer", "ReceiveUserID", userID);
-        //var username = getURLParameter("username");
-        unityInstance.SendMessage("AppInitializer", "ReceiveUsername", username);
-      }).catch(function(error) {
-        console.error("Unity load error: ", error);
-      });
-    </script>
-  </body>
+      var canvas = document.querySelector("#unity-canvas");
+      canvas.style.width = "100%";
+      canvas.style.height = "100%";
+      canvas.style.position = "fixed";
+      document.body.style.textAlign = "left";
+    }
+
+    var unityInstance = createUnityInstance(canvas, {
+      dataUrl: "Build/hizzycoin_webgl3_Tg_API.data",
+      frameworkUrl: "Build/hizzycoin_webgl3_Tg_API.framework.js",
+      codeUrl: "Build/hizzycoin_webgl3_Tg_API.wasm",
+      streamingAssetsUrl: "StreamingAssets",
+      companyName: "hizzycoin",
+      productName: "hizzycoinapp",
+      productVersion: "0.1",
+    }).then(function(instance) {
+      unityInstance = instance;
+      unityInstance.SendMessage("AppInitializer", "ReceiveUserID", userID);
+      unityInstance.SendMessage("AppInitializer", "ReceiveUsername", username);
+    }).catch(function(error) {
+      console.error("Unity load error: ", error);
+    });
+  });
+</script>
+</body>
 </html>
-
-
-
