@@ -12,38 +12,37 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
   document.addEventListener("DOMContentLoaded", function() {
-    Telegram.WebApp.ready().then(function() {
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        // Mobile device style
-        var meta = document.createElement('meta');
-        meta.name = 'viewport';
-        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-        document.getElementsByTagName('head')[0].appendChild(meta);
-
-        var canvas = document.querySelector("#unity-canvas");
-        canvas.style.width = "100%";
-        canvas.style.height = "100%";
-        canvas.style.position = "fixed";
-        document.body.style.textAlign = "left";
-      }
-      var unityInstance = createUnityInstance(canvas, {
-        dataUrl: "Build/hizzycoin_webgl3_Tg_API.data",
-        frameworkUrl: "Build/hizzycoin_webgl3_Tg_API.framework.js",
-        codeUrl: "Build/hizzycoin_webgl3_Tg_API.wasm",
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "hizzycoin",
-        productName: "hizzycoinapp",
-        productVersion: "0.1",
-      }).then(function(instance) {
-        unityInstance = instance;
+    console.log("Start function");
+    if (typeof Telegram !== 'undefined') {
+      Telegram.WebApp.ready();
+      // Проверка доступности данных
+      if (Telegram.WebApp.initDataUnsafe) {
         const userData = Telegram.WebApp.initDataUnsafe.user;
-        unityInstance.SendMessage("AppInitializer", "ReceiveUserID", userData.id.toString());
-        unityInstance.SendMessage("AppInitializer", "ReceiveUsername", userData.username);
-      }).catch(function(error) {
-        console.error("Unity load error: ", error);
-      });
-    });
+        console.log("Got userdata " + userData.id);
+        const canvas = document.querySelector("#unity-canvas");
+        var unityInstance = createUnityInstance(canvas, {
+          dataUrl: "Build/hizzycoin_webgl3_Tg_API.data",
+          frameworkUrl: "Build/hizzycoin_webgl3_Tg_API.framework.js",
+          codeUrl: "Build/hizzycoin_webgl3_Tg_API.wasm",
+          streamingAssetsUrl: "StreamingAssets",
+          companyName: "hizzycoin",
+          productName: "hizzycoinapp",
+          productVersion: "0.1",
+        }).then(function(instance) {
+          unityInstance = instance;
+          unityInstance.SendMessage("AppInitializer", "ReceiveUserID", userData.id.toString());
+          unityInstance.SendMessage("AppInitializer", "ReceiveUsername", userData.username);
+        }).catch(function(error) {
+          console.error("Unity load error: ", error);
+        });
+      } else {
+        console.log("Telegram WebApp data is not available.");
+      }
+    } else {
+      console.log("Telegram WebApp is not defined.");
+    }
   });
+
 </script>
 
 </body>
