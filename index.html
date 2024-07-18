@@ -13,7 +13,7 @@
   document.addEventListener("DOMContentLoaded", function() {
     if (typeof Telegram !== 'undefined') {
       Telegram.WebApp.ready();
-      
+
       if (Telegram.WebApp.initDataUnsafe) {
         const userData = Telegram.WebApp.initDataUnsafe.user;
         const startParam = Telegram.WebApp.initDataUnsafe.start_param;
@@ -21,7 +21,7 @@
         console.log("Got referral " + refId);
         let canvas;
         if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-          
+
           var meta = document.createElement('meta');
           meta.name = 'viewport';
           meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
@@ -38,7 +38,7 @@
           canvas.style.width = "100%";
           canvas.style.height = "100%";
         }
-        
+
         var unityInstance = createUnityInstance(canvas, {
           dataUrl: "Build/hizzycoin_webgl4_Tg_API2.data",
           frameworkUrl: "Build/hizzycoin_webgl4_Tg_API2.framework.js",
@@ -66,6 +66,8 @@
 </script>
 </body>
 </html>
+
+
 
 
 
