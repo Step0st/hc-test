@@ -4,13 +4,67 @@
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <title>Unity WebGL Player | hizzycoinapp</title>
+  <style>
+    body {
+      text-align: center;
+      padding: 0;
+      margin: 0;
+      background: #000; 
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh; 
+    }
+    #loading-logo {
+      width: 200px; 
+      height: 200px;
+      background: url('hizzycoin.png') no-repeat center center; 
+      background-size: contain;
+      position: absolute; 
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: pulse 2s infinite ease-in-out; 
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: translate(-50%, -50%) scale(1); 
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(1.1);
+      }
+    }
+    #unity-canvas {
+      background: #231F20;
+      visibility: hidden; 
+    }
+
+  </style>
 </head>
-<body style="text-align: center; padding: 0; border: 0; margin: 0;">
+<div id="loading-logo"></div>
 <canvas id="unity-canvas" width=560 height=1220 style="width: 560px; height: 1220px; background: #231F20"></canvas>
-<script src="Build/hizzycoin_webgl4_Tg_API2.loader.js"></script>
+<script src="Build/hc.loader.js"></script>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
   document.addEventListener("DOMContentLoaded", function() {
+    let canvas = document.querySelector("#unity-canvas");
+
+    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+      var meta = document.createElement('meta');
+      meta.name = 'viewport';
+      meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+      document.getElementsByTagName('head')[0].appendChild(meta);
+      document.body.style.textAlign = 'left'; // Выравнивание текста для мобильных устройств
+
+      canvas.style.width = "100%";
+      canvas.style.height = "100%";
+      canvas.style.position = "fixed";
+    } else {
+      canvas.style.width = "100%";
+      canvas.style.height = "100%";
+    }
+
     if (typeof Telegram !== 'undefined') {
       Telegram.WebApp.ready();
 
@@ -18,40 +72,22 @@
         const userData = Telegram.WebApp.initDataUnsafe.user;
         const startParam = Telegram.WebApp.initDataUnsafe.start_param;
         var refId = startParam ? startParam : "";
-        let canvas;
-        if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-
-          var meta = document.createElement('meta');
-          meta.name = 'viewport';
-          meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-          document.getElementsByTagName('head')[0].appendChild(meta);
-
-          canvas = document.querySelector("#unity-canvas");
-          canvas.style.width = "100%";
-          canvas.style.height = "100%";
-          canvas.style.position = "fixed";
-
-          document.body.style.textAlign = "left";
-        } else {
-          canvas = document.querySelector("#unity-canvas");
-          canvas.style.width = "100%";
-          canvas.style.height = "100%";
-        }
 
         var unityInstance = createUnityInstance(canvas, {
-          dataUrl: "Build/hizzycoin_webgl4_Tg_API2.data",
-          frameworkUrl: "Build/hizzycoin_webgl4_Tg_API2.framework.js",
-          codeUrl: "Build/hizzycoin_webgl4_Tg_API2.wasm",
+          dataUrl: "Build/hc.data",
+          frameworkUrl: "Build/hc.framework.js",
+          codeUrl: "Build/hc.wasm",
           streamingAssetsUrl: "StreamingAssets",
           companyName: "hizzycoin",
           productName: "hizzycoinapp",
           productVersion: "0.1",
         }).then(function(instance) {
           unityInstance = instance;
-          if (refId) { unityInstance.SendMessage("AppInitializer", "ReceiveReferral", refId);
-          }
+          if (refId) { unityInstance.SendMessage("AppInitializer", "ReceiveReferral", refId);}
           unityInstance.SendMessage("AppInitializer", "ReceiveUserID", userData.id.toString());
           unityInstance.SendMessage("AppInitializer", "ReceiveUsername", userData.username);
+          document.getElementById('loading-logo').style.display = 'none';
+          canvas.style.visibility = 'visible';
         }).catch(function(error) {
           console.error("Unity load error: ", error);
         });
@@ -65,8 +101,4 @@
 </script>
 </body>
 </html>
-
-
-
-
 
